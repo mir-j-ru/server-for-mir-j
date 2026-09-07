@@ -29,7 +29,7 @@ func PutWarehoyse(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
         return
     }
 
-    quantity, err := strconv.ParseInt(quantitystr, 10, 64)
+    quantity, err := strconv.ParseInt(number, 10, 64)
     if err != nil{
         http.Error(w, "error update warehouse: quantity not int", http.StatusBadRequest)
         return
