@@ -34,6 +34,10 @@ func main(){
         handlers.GetWarehouse(w, r, dbConn)
     })//получение комплектации
 
+    http.HandleFunc("/put_warehouse", func(w http.ResponseWriter, r *http.Request){
+        handlers.PutWarehoyse(w, r, dbConn)
+    })//получение комплектации
+
     port := os.Getenv("PORT")
     if port == "" {
         port = "8080"
