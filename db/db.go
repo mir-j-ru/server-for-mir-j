@@ -295,6 +295,13 @@ func GetWarehouse(db *sql.DB) ([]models.Warehouse, error){
     return warehouse, nil
 }//получение комплектации с склада
 
+func PutWarehoyse(db *sql.DB, id int64, category string) error{
+    _, err := db.Exec(`UPDATE warehouse_list SET category = $1 WHERE id = $2`, category, id) 
+
+    if err!= nil{
+        log.Fatal("error update warehouse: ", err) 
+    }
+}
 
 func InitDB() *sql.DB{
     //подключаемся к БД
