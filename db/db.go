@@ -301,6 +301,7 @@ func PutWarehoyse(db *sql.DB, id int64, category string) error{
     if err!= nil{
         log.Fatal("error update warehouse: ", err) 
     }
+    return nil
 }
 
 func InitDB() *sql.DB{
