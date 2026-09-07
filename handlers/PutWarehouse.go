@@ -31,7 +31,7 @@ func PutWarehoyse(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
 
     id, err :=  strconv.ParseInt(number, 10, 64)
     if err != nil{
-        http.Error(w, "error update warehouse: id not int")
+        http.Error(w, "error update warehouse: id not int", http.StatusBadRequest)
         return
     }
 
