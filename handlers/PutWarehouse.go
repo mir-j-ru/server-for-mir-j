@@ -35,7 +35,7 @@ func PutWarehoyse(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
         return
     }
 
-    err = db.PutWarehoyse(dbConn, number, category)
+    err = db.PutWarehoyse(dbConn, id, category)
     if err!=nil{
         http.Error(w, "error db:", http.StatusInternalServerError)
         return
