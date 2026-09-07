@@ -20,22 +20,23 @@ func PutWarehoyse(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
     number := value.Get("id")
 
     if category == ""{
-        http.Error(w, "error create warehouse: not category", http.StatusBadRequest)
+        http.Error(w, "error update warehouse: not category", http.StatusBadRequest)
         return
     }
 
     if number == ""{
-        http.Error(w, "error create warehouse: not number", http.StatusBadRequest)
+        http.Error(w, "error update warehouse: not number", http.StatusBadRequest)
         return
     }
 
-    id, err :=  strconv.ParseInt(number, 10, 64)
+    quantity, err := strconv.ParseInt(quantitystr, 10, 64)
     if err != nil{
-        http.Error(w, "error update warehouse: id not int", http.StatusBadRequest)
+        http.Error(w, "error update warehouse: quantity not int", http.StatusBadRequest)
         return
     }
 
-    err = db.PutWarehoyse(dbConn, id, category)
+
+    err = db.PutWarehoyse(dbConn, quantity, category)
     if err!=nil{
         http.Error(w, "error db:", http.StatusInternalServerError)
         return
