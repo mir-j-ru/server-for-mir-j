@@ -284,7 +284,7 @@ func UpdateWarehouse(db *sql.DB, id int64, amount int64) error{
 
 
 func GetWarehouse(db *sql.DB) ([]models.Warehouse, error){
-    rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
+    rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list ORDER BY id`)
     if err != nil{
         log.Fatal("error get warehouse: ", err)
     }
