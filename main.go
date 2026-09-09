@@ -42,6 +42,10 @@ func main(){
         handlers.UpdateWarehouse(w, r, dbConn)
     })//получение комплектации
 
+    http.HandleFunc("/delete", func(w http.ResponseWriter, r *http.Request){
+        handlers.DeleteWarehouse(w, r, dbConn)
+    })//получение комплектации
+
     port := os.Getenv("PORT")
     if port == "" {
         port = "8080"
