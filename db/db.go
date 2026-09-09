@@ -315,6 +315,16 @@ func PutWarehoyse(db *sql.DB, id int64, category string) error{
     return nil
 }
 
+func DeleteWarehouse(db *sql.DB, id int64) error{
+    _, err := db.Exec(`DELETE FROM warehouse_list WHERE id=$1`, id)
+
+    if err!=nil{
+        log.Fatal("error delete warehouse_list: ", err)
+    }
+
+    return err
+}
+
 func InitDB() *sql.DB{
     //подключаемся к БД
     connstr := os.Getenv("DATABASE_URL")
