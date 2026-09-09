@@ -272,6 +272,17 @@ func AddWarehouse(db *sql.DB, name string, quantity int64, category string, numb
     return nil
 }
 
+func UpdateWarehouse(db *sql.DB, id int64, amount int64) error{
+    _, err := db.Exec(`UPDATE warehouse_list SET quantity = quantity + $1 WHERE id = $2`, amount, id)
+
+    if err != nil{
+        log.Fatal("error updated warehouse: ", err)
+    }
+
+    return err
+}
+
+
 func GetWarehouse(db *sql.DB) ([]models.Warehouse, error){
     rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
     if err != nil{
