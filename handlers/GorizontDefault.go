@@ -38,7 +38,7 @@ func GorizontDefault(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
         return
     }
     
-    err = db.GorizontDefault(dbConn,hs, wight)
+    err = db.GorizontDefault(dbConn,h, wight)
     if err!=nil{
         http.Error(w, "error db:", http.StatusInternalServerError)
         return
