@@ -13,7 +13,18 @@ import(
 )
 
 func GorizontDefault(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
-    quotes, err := db.GorizontDefault(dbConn)
+    idstr := r.URL.Query().Get("height")
+    if idstr == ""{
+        http.Error(w, "error, id no", http.StatusBadRequest)
+        return
+    }
+
+    id,err:=strconv.ParseInt(idstr, 10,64)
+    if err!=nil{
+        http.Error(w, "error, id not int", http.StatusBadRequest)
+        return
+    }
+    quotes, err := db.GorizontDefault(dbConn, id)
     if err!=nil{
         http.Error(w, "error db:", http.StatusInternalServerError)
         return
