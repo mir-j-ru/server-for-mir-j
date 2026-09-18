@@ -325,7 +325,77 @@ func DeleteWarehouse(db *sql.DB, id int64) error{
     return err
 }
 
-func GorizontDefault(db *sql.DB, height int64) error{
+func GorizontDefault(db *sql.DB, height int64, width int64) error {
+    // height и width не используются в этом коде — если они нужны позже, оставь.
+    orders := map[string]int{
+        "67": -1, "69": -1, "72": -1, "73": -1,
+        "76": -4, "77": -2, "78": -1, "79": -1,
+        "80": -1, "84": -2, "85": -2, "87": -2,
+        "92": -2,
+    }
+
+    rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
+    if err != nil {
+        return fmt.Errorf("error get warehouse: %w", err)
+    }
+    defer rows.Close()
+
+    var warehouse []models.Warehouse
+    for rows.Next() {
+        var w models.Warehouse
+        err = rows.Scan(&w.ID, &w.Name, &w.Quantity, &w.Category, &w.Number)
+        if err != nil {
+            return fmt.Errorf("error scan warehouse row: %w", err)
+        }
+        warehouse = append(warehouse, w)
+    }
+    if rows.Err() != nil {
+        return fmt.Errorf("error after rows iteration: %w", rows.Err())
+    }
+
+    // 1. Проверка достаточности товара
+    // Предполагаем, что ключ orders — это ID склада (как строка).
+    for idStr, amount := range orders {
+        for _, w := range warehouse {
+            _, err := strconv.ParseInt(idStr, 10, 64)
+            if err != nil {
+                return fmt.Errorf("error parsing id to int: %w", err)
+            }
+
+            if w.Quantity+amount < 0 {
+                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+            }
+
+            switch w.ID {
+            case 62, 63:
+                if int64(w.Quantity)-height < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            case 83:
+                if int64(w.Quantity)-width-150 < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            case 369:
+                if w.Quantity-800 < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            }
+        }
+    }
+
+    // 2. Обновление остатков
+    for idStr, amount := range orders {
+        id, err := strconv.ParseInt(idStr, 10, 64)
+        if err != nil {
+            return fmt.Errorf("error parsing id to int: %w", err)
+        }
+
+        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity + $1 WHERE id = $2`, amount, id)
+        if err != nil {
+            return fmt.Errorf("error updating warehouse: %w", err)
+        }
+    }
+
     return nil
 }
 
