@@ -46,6 +46,10 @@ func main(){
         handlers.DeleteWarehouse(w, r, dbConn)
     })//получение комплектации
 
+    http.HandleFunc("/gordef", func(w http.ResponseWriter, r *http.Request){
+        handlers.GorizontDefault(w, r, dbConn)
+    })//получение комплектации
+
     port := os.Getenv("PORT")
     if port == "" {
         port = "8080"
