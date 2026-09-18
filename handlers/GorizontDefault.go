@@ -24,11 +24,10 @@ func GorizontDefault(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
         http.Error(w, "error, id not int", http.StatusBadRequest)
         return
     }
-    quotes, err := db.GorizontDefault(dbConn, id)
+    err = db.GorizontDefault(dbConn,id)
     if err!=nil{
         http.Error(w, "error db:", http.StatusInternalServerError)
         return
     }
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(quotes)
+    fmt.Fprintf(w, "success! horizon default updated!")
 }
