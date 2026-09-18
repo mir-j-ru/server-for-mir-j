@@ -16,7 +16,7 @@ import(
 func GorizontDefault(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
     wights := r.URL.Query().Get("wight")
     if wights == ""{
-        http.Error(w, "error, id no", http.StatusBadRequest)
+        http.Error(w, "error, wight no", http.StatusBadRequest)
         return
     }
 
@@ -28,7 +28,7 @@ func GorizontDefault(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
 
     hs := r.URL.Query().Get("height")
     if hs == ""{
-        http.Error(w, "error, id no", http.StatusBadRequest)
+        http.Error(w, "error, height no", http.StatusBadRequest)
         return
     }
 
