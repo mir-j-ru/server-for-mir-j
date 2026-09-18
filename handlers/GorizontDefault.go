@@ -41,7 +41,7 @@ func GorizontDefault(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
     err = db.GorizontDefault(dbConn,h, wight)
     if err!=nil{
         
-        http.Error(w, err, http.StatusInternalServerError)
+        http.Error(w, string(err), http.StatusInternalServerError)
         return
     }
     fmt.Fprintf(w, "success! horizon default updated!")
