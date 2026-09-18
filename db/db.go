@@ -325,6 +325,10 @@ func DeleteWarehouse(db *sql.DB, id int64) error{
     return err
 }
 
+func GorizontDefault(db *sql.DB, height int64) error{
+    return nil
+}
+
 func InitDB() *sql.DB{
     //подключаемся к БД
     connstr := os.Getenv("DATABASE_URL")
