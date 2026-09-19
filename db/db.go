@@ -408,7 +408,7 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
         return fmt.Errorf("error update warehouse 63: %w", err)
     }
 
-    if wight > 1500{
+    if width > 1500{
         _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-1000 WHERE id=397`)
         if err != nil{
             return fmt.Errorf("error update warehouse 397: %w", err)
@@ -420,7 +420,7 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
         }
     }
 
-    wifht_res := widht+150
+    wifht_res := width+150
 
     _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=83`, wifht_res)
     if err != nil{
