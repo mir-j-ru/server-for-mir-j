@@ -377,7 +377,7 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
                 if int64(w.Quantity)-width-150 < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
-            case 369:
+            case 397:
                 if w.Quantity-800 < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
@@ -396,6 +396,35 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
         if err != nil {
             return fmt.Errorf("error updating warehouse: %w", err)
         }
+    }
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=62`, height)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 62: %w", err)
+    }
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=63`, height)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 63: %w", err)
+    }
+
+    if wight > 1500{
+        _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-1000 WHERE id=397`)
+        if err != nil{
+            return fmt.Errorf("error update warehouse 397: %w", err)
+        }
+    }else{
+        _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-800 WHERE id=397`)
+        if err != nil{
+            return fmt.Errorf("error update warehouse 397: %w", err)
+        }
+    }
+
+    wifht_res := widht+150
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=83`, wifht_res)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 83: %w", err)
     }
 
     return nil
