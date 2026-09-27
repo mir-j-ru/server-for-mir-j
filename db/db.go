@@ -430,6 +430,41 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
     return nil
 }
 
+func VerDef(db *sql.DB, height int64, width int64) error{
+    orders := map[string]int{
+        "7" : 1, "8" : 1,"10":1,"11":1,"15":1,"17":1,"25":2,"35":1,"38":1,"43":1,"47":1,"48":1
+    }
+
+    rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
+    if err != nil {
+        return fmt.Errorf("error get warehouse: %w", err)
+    }
+    defer rows.Close()
+
+    var warehouse []models.Warehouse
+    for rows.Next() {
+        var w models.Warehouse
+        err = rows.Scan(&w.ID, &w.Name, &w.Quantity, &w.Category, &w.Number)
+        if err != nil {
+            return fmt.Errorf("error scan warehouse row: %w", err)
+        }
+        warehouse = append(warehouse, w)
+    }
+    if rows.Err() != nil {
+        return fmt.Errorf("error after rows iteration: %w", rows.Err())
+    }
+
+    for _, w := range warehouse {
+            _, err := strconv.ParseInt(idStr, 10, 64)
+            if err != nil {
+                return fmt.Errorf("error parsing id to int: %w", err)
+            }
+
+            if w.Quantity+amount < 0 {
+                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+            }
+}
+
 func InitDB() *sql.DB{
     //подключаемся к БД
     connstr := os.Getenv("DATABASE_URL")
