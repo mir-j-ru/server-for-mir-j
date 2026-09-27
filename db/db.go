@@ -454,7 +454,8 @@ func VerDef(db *sql.DB, height int64, width int64) error{
         return fmt.Errorf("error after rows iteration: %w", rows.Err())
     }
 
-    for _, w := range warehouse {
+    for idStr, amount := range orders {
+        for _, w := range warehouse {
             _, err := strconv.ParseInt(idStr, 10, 64)
             if err != nil {
                 return fmt.Errorf("error parsing id to int: %w", err)
@@ -463,6 +464,42 @@ func VerDef(db *sql.DB, height int64, width int64) error{
             if w.Quantity+amount < 0 {
                 return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
+        }
+
+        switch w.ID {
+            case 6, 398:
+                if int64(w.Quantity)-height < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            case 13, 17, 20:
+                if int64(w.Quantity)-height/9 < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            case 24:
+                if int64(w.Quantity)-height/9*2 < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            case 23:
+                if int64(w.Quantity)-(height*2+(width-20)*2 < 0{
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            }
+        }
+    }
+
+    // 2. Обновление остатков
+    for idStr, amount := range orders {
+        id, err := strconv.ParseInt(idStr, 10, 64)
+        if err != nil {
+            return fmt.Errorf("error parsing id to int: %w", err)
+        }
+
+        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity + $1 WHERE id = $2`, amount, id)
+        if err != nil {
+            return fmt.Errorf("error updating warehouse: %w", err)
+        }
+    }    
+        
 }
 
 func InitDB() *sql.DB{
