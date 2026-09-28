@@ -44,11 +44,15 @@ func main(){
 
     http.HandleFunc("/delete", func(w http.ResponseWriter, r *http.Request){
         handlers.DeleteWarehouse(w, r, dbConn)
-    })//получение комплектации
+    })//удаление комплектации
 
     http.HandleFunc("/gordef", func(w http.ResponseWriter, r *http.Request){
         handlers.GorizontDefault(w, r, dbConn)
-    })//получение комплектации
+    })//вычитание горизонтальной комплектации
+
+    http.HandleFunc("/verdef", func(w http.ResponseWriter, r *http.Request){
+        handlers.VerDef(w, r, dbConn)
+    })//вычитание вертикальной комплектации
 
     port := os.Getenv("PORT")
     if port == "" {
