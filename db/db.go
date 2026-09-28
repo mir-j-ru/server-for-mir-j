@@ -463,9 +463,8 @@ func VerDef(db *sql.DB, height int64, width int64) error{
             if w.Quantity+amount < 0 {
                 return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
-        }
 
-        switch w.ID {
+            switch w.ID {   // ← теперь внутри for
             case 6, 398:
                 if int64(w.Quantity)-height < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
@@ -475,11 +474,11 @@ func VerDef(db *sql.DB, height int64, width int64) error{
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             case 24:
-                if int64(w.Quantity)-math.Round(height/9*2) < 0 {
+                if int64(w.Quantity)-int64(math.Round(float64(height)/9*2)) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             case 23:
-                if int64(w.Quantity)-math.Round(height*2+(width-20)*2) < 0{
+                if int64(w.Quantity)-int64(math.Round(float64(height)*2+(float64(width)-20)*2)) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             }
@@ -499,7 +498,7 @@ func VerDef(db *sql.DB, height int64, width int64) error{
         }
     }    
     
-    minus_d :=  math.Round(haight/9)
+    minus_d :=  math.Round(float64(height/9))
 
     _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=13`, minus_d)
     if err != nil{
@@ -530,7 +529,7 @@ func VerDef(db *sql.DB, height int64, width int64) error{
 
     for_tr := (width-20)*2
 
-    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=30`, )
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=30`, for_tr)
     if err != nil{
         return fmt.Errorf("error update warehouse 30: %w", err)
     }
