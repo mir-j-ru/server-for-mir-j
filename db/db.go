@@ -505,8 +505,7 @@ func VerDef(db *sql.DB, height int64, width int64) error{
         return fmt.Errorf("error update warehouse 13: %w", err)
     }
 
-    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=6`, height
-                    )
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=6`, height)
     if err != nil{
         return fmt.Errorf("error update warehouse 6: %w", err)
     }
