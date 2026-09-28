@@ -432,9 +432,7 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
 }
 
 func VerDef(db *sql.DB, height int64, width int64) error{
-    orders := map[string]int{
-        "7" : 1, "8" : 1,"10":1,"11":1,"15":1,"17":1,"25":2,"35":1,"38":1,"43":1,"47":1,"48":1
-    }
+    orders := map[string]int{"7" : 1, "8" : 1,"10":1,"11":1,"15":1,"17":1,"25":2,"35":1,"38":1,"43":1,"47":1,"48":1,}
 
     rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
     if err != nil {
