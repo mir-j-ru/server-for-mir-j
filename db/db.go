@@ -487,7 +487,7 @@ func VerDef(db *sql.DB, height int64, width int64) error{
     }
 
     // 2. Обновление остатков
-    for idStr, amount := range orders {
+    for idStr, amount = range orders {
         id, err := strconv.ParseInt(idStr, 10, 64)
         if err != nil {
             return fmt.Errorf("error parsing id to int: %w", err)
