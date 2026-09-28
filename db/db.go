@@ -7,6 +7,7 @@ import(
     "time"
     "strconv"
     "fmt"
+    "math"
 
     _"github.com/lib/pq"
     "ecosystem_mir_j/models"
@@ -476,11 +477,11 @@ func VerDef(db *sql.DB, height int64, width int64) error{
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             case 24:
-                if int64(w.Quantity)-height/9*2 < 0 {
+                if int64(w.Quantity)-math.Round(height/9*2) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             case 23:
-                if int64(w.Quantity)-(height*2+(width-20)*2 < 0{
+                if int64(w.Quantity)-math.Round(height*2+(width-20)*2) < 0{
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             }
@@ -499,7 +500,44 @@ func VerDef(db *sql.DB, height int64, width int64) error{
             return fmt.Errorf("error updating warehouse: %w", err)
         }
     }    
-        
+    
+    minus_d :=  math.Round(haight/9)
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=13`, minus_d)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 13: %w", err)
+    }
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=17`, minus_d)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 17: %w", err)
+    }
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=20`, minus_d)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 20: %w", err)
+    }
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=24`, minus_d*2)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 24: %w", err)
+    }
+
+    for_dt := height*2+(width-20)*2
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=23`, for_dt)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 23: %w", err)
+    }
+
+    for_tr := (width-20)*2
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=30`, )
+    if err != nil{
+        return fmt.Errorf("error update warehouse 30: %w", err)
+    }
+
+    return nil
 }
 
 func InitDB() *sql.DB{
