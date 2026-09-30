@@ -54,6 +54,14 @@ func main(){
         handlers.VerDef(w, r, dbConn)
     })//вычитание вертикальной комплектации
 
+    http.HandleFunc("/defuni", func(w http.ResponseWriter, r *http.Request){
+        handlers.DefUNI(w, r, dbConn)
+    })//добавление комплектации
+
+    http.HandleFunc("/defmini", func(w http.ResponseWriter, r *http.Request){
+        handlers.DefMINI(w, r, dbConn)
+    })//добавление комплектации
+
     port := os.Getenv("PORT")
     if port == "" {
         port = "8080"
