@@ -586,7 +586,7 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             case 242:
-                if int64(w.Quantity)-int64(math.Round(float64(widht*2-30))) < 0 {
+                if int64(w.Quantity)-int64(math.Round(float64(width*2-30))) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             }
@@ -626,7 +626,7 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
         return fmt.Errorf("error update warehouse 30: %w", err)
     } 
 
-    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=242`, widht*2-30)
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=242`, width*2-30)
     if err != nil{
         return fmt.Errorf("error update warehouse 30: %w", err)
     } 
