@@ -586,7 +586,7 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             case 242:
-                if int64(w.Quantity)-int64(math.Round(float64(wight*2-30)) < 0 {
+                if int64(w.Quantity)-int64(math.Round(float64(wight*2-30))) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             }
