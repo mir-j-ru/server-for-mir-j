@@ -548,7 +548,7 @@ func VerDef(db *sql.DB, height int64, width int64) error{
 }
 
 func DefMINI(db *sql.DB, height int64, width int64) error{
-    orders := map[string]int{}
+    orders := map[string]int{"250":1,"251":2,"256":1,"259":2,"287":2,"244":1}
 
     rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
     if err != nil {
@@ -579,6 +579,17 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
             if w.Quantity+amount < 0 {
                 return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
+
+            switch w.ID {   // ← теперь внутри for
+            case 235, 236,316,314:
+                if int64(w.Quantity)-height < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            case 242:
+                if int64(w.Quantity)-int64(math.Round(float64(wight*2-30)) < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            }
         }
     }
 
@@ -594,6 +605,31 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
             return fmt.Errorf("error updating warehouse: %w", err)
         }
     }  
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=235`, height)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 30: %w", err)
+    }         
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=236`, height)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 30: %w", err)
+    }  
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=316`, height)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 30: %w", err)
+    } 
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=314`, height)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 30: %w", err)
+    } 
+
+    _, err = db.Exec(`UPDATE warehouse_list SET quantity=quantity-$1 WHERE id=242`, wight*2-30)
+    if err != nil{
+        return fmt.Errorf("error update warehouse 30: %w", err)
+    } 
 
     return nil
 }
