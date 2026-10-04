@@ -359,29 +359,30 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
     // 1. Проверка достаточности товара
     // Предполагаем, что ключ orders — это ID склада (как строка).
     for idStr, amount := range orders {
-        for _, w := range warehouse {
-            _, err := strconv.ParseInt(idStr, 10, 64)
-            if err != nil {
-                return fmt.Errorf("error parsing id to int: %w", err)
-            }
+    id, err := strconv.ParseInt(idStr, 10, 64)
+    if err != nil {
+        return fmt.Errorf("error parsing id to int: %w", err)
+    }
 
-            if w.Quantity+amount < 0 {
+    for _, w := range warehouse {
+        if w.ID == int(id) {
+            if int64(w.Quantity)-amount < 0 {
                 return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
+        }
 
-            switch w.ID {
-            case 62, 63:
-                if int64(w.Quantity)-height < 0 {
-                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
-                }
-            case 83:
-                if int64(w.Quantity)-width-150 < 0 {
-                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
-                }
-            case 397:
-                if w.Quantity-800 < 0 {
-                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
-                }
+        switch w.ID {
+        case 62, 63:
+            if int64(w.Quantity)-height < 0 {
+                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+            }
+        case 83:
+            if int64(w.Quantity)-width-150 < 0 {
+                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+            }
+        case 397:
+            if w.Quantity-800 < 0 {
+                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
         }
     }
@@ -454,14 +455,16 @@ func VerDef(db *sql.DB, height int64, width int64) error{
     }
 
     for idStr, amount := range orders {
-        for _, w := range warehouse {
-            _, err := strconv.ParseInt(idStr, 10, 64)
-            if err != nil {
-                return fmt.Errorf("error parsing id to int: %w", err)
-            }
+        id, err := strconv.ParseInt(idStr, 10, 64)
+        if err != nil {
+            return fmt.Errorf("error parsing id to int: %w", err)
+        }
 
-            if w.Quantity-amount < 0 {
-                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+        for _, w := range warehouse {
+            if w.ID == int(id) {
+                if int64(w.Quantity)-amount < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
             }
 
             switch w.ID {   // ← теперь внутри for
@@ -570,18 +573,21 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
     }
 
     for idStr, amount := range orders {
+        id, err := strconv.ParseInt(idStr, 10, 64)
+        if err != nil {
+            return fmt.Errorf("error parsing id to int: %w", err)
+        }
+
         for _, w := range warehouse {
-            _, err := strconv.ParseInt(idStr, 10, 64)
-            if err != nil {
-                return fmt.Errorf("error parsing id to int: %w", err)
+            if w.ID == int(id) {
+                if int64(w.Quantity)-amount < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
             }
 
-            if w.Quantity-amount < 0 {
-                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
-            }
-
-            switch w.ID {   // ← теперь внутри for
-            case 235, 236,316,314:
+            // ← switch теперь внутри for
+            switch w.ID {
+            case 235, 236, 316, 314:
                 if int64(w.Quantity)-height < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
@@ -657,14 +663,16 @@ func DefUNIL(db *sql.DB, height int64, width int64) error{
     }
 
     for idStr, amount := range orders {
-        for _, w := range warehouse {
-            _, err := strconv.ParseInt(idStr, 10, 64)
-            if err != nil {
-                return fmt.Errorf("error parsing id to int: %w", err)
-            }
+        id, err := strconv.ParseInt(idStr, 10, 64)
+        if err != nil {
+            return fmt.Errorf("error parsing id to int: %w", err)
+        }
 
-            if w.Quantity-int(amount) < 0 {
-                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+        for _, w := range warehouse {
+            if w.ID == int(id) {  // ← проверяем только нужный ID
+                if int64(w.Quantity)-amount < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
             }
         }
     }
@@ -708,14 +716,16 @@ func DefUNIR(db *sql.DB, height int64, width int64) error{
     }
 
     for idStr, amount := range orders {
-        for _, w := range warehouse {
-            _, err := strconv.ParseInt(idStr, 10, 64)
-            if err != nil {
-                return fmt.Errorf("error parsing id to int: %w", err)
-            }
+        id, err := strconv.ParseInt(idStr, 10, 64)
+        if err != nil {
+            return fmt.Errorf("error parsing id to int: %w", err)
+        }
 
-            if w.Quantity+amount < 0 {
-                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+        for _, w := range warehouse {
+            if w.ID == int(id) {  // ← проверяем только нужный ID
+                if int64(w.Quantity)-amount < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
             }
         }
     }
