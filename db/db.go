@@ -366,7 +366,7 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
 
         for _, w := range warehouse {
             if w.ID == int(id) {
-                if int64(w.Quantity)-amount < 0 {
+                if int64(w.Quantity)-int64(amount) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             }
@@ -463,7 +463,7 @@ func VerDef(db *sql.DB, height int64, width int64) error{
 
         for _, w := range warehouse {
             if w.ID == int(id) {
-                if int64(w.Quantity)-amount < 0 {
+                if int64(w.Quantity)-int64(amount) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             }
@@ -581,7 +581,7 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
 
         for _, w := range warehouse {
             if w.ID == int(id) {
-                if int64(w.Quantity)-amount < 0 {
+                if int64(w.Quantity)-int64(amount) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             }
@@ -724,7 +724,7 @@ func DefUNIR(db *sql.DB, height int64, width int64) error{
 
         for _, w := range warehouse {
             if w.ID == int(id) {  // ← проверяем только нужный ID
-                if int64(w.Quantity)-amount < 0 {
+                if int64(w.Quantity)-int64(amount) < 0 {
                     return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
                 }
             }
