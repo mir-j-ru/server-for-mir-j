@@ -359,30 +359,31 @@ func GorizontDefault(db *sql.DB, height int64, width int64) error {
     // 1. Проверка достаточности товара
     // Предполагаем, что ключ orders — это ID склада (как строка).
     for idStr, amount := range orders {
-    id, err := strconv.ParseInt(idStr, 10, 64)
-    if err != nil {
-        return fmt.Errorf("error parsing id to int: %w", err)
-    }
-
-    for _, w := range warehouse {
-        if w.ID == int(id) {
-            if int64(w.Quantity)-amount < 0 {
-                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
-            }
+        id, err := strconv.ParseInt(idStr, 10, 64)
+        if err != nil {
+            return fmt.Errorf("error parsing id to int: %w", err)
         }
 
-        switch w.ID {
-        case 62, 63:
-            if int64(w.Quantity)-height < 0 {
-                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+        for _, w := range warehouse {
+            if w.ID == int(id) {
+                if int64(w.Quantity)-amount < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
             }
-        case 83:
-            if int64(w.Quantity)-width-150 < 0 {
-                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
-            }
-        case 397:
-            if w.Quantity-800 < 0 {
-                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+
+            switch w.ID {
+            case 62, 63:
+                if int64(w.Quantity)-height < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }    
+            case 83:
+                if int64(w.Quantity)-width-150 < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }
+            case 397:
+                if w.Quantity-800 < 0 {
+                    return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+                }    
             }
         }
     }
