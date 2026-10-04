@@ -635,7 +635,7 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
 }
 
 func DefUNIL(db *sql.DB, height int64, width int64) error{
-    orders := map[string]int{"147":height, "148": height, "153":height,"155":height,"158":1,"167":2,"174":width*2-14, "178":width*2-30, "182":1,"184":2,"187":2,"191":2,"192":height, "194":height,"197":width*2-14,"224":1}
+    orders := map[string]int64{"147":height, "148": height, "153":height,"155":height,"158":1,"167":2,"174":width*2-14, "178":width*2-30, "182":1,"184":2,"187":2,"191":2,"192":height, "194":height,"197":width*2-14,"224":1}
 
     rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
     if err != nil {
