@@ -634,8 +634,59 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
     return nil
 }
 
-func DefUNI(db *sql.DB, height int64, width int64) error{
-    orders := map[string]int{}
+func DefUNIL(db *sql.DB, height int64, width int64) error{
+    orders := map[string]int{"147":height, "148": height, "153":height,"155":height,"158":1,"167":2,"174":width*2-14, "178":width*2-30, "182":1,"184":2,"187":2,"191":2,"192":height, "194":height,"197":width*2-14,"224":1}
+
+    rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
+    if err != nil {
+        return fmt.Errorf("error get warehouse: %w", err)
+    }
+    defer rows.Close()
+
+    var warehouse []models.Warehouse
+    for rows.Next() {
+        var w models.Warehouse
+        err = rows.Scan(&w.ID, &w.Name, &w.Quantity, &w.Category, &w.Number)
+        if err != nil {
+            return fmt.Errorf("error scan warehouse row: %w", err)
+        }
+        warehouse = append(warehouse, w)
+    }
+    if rows.Err() != nil {
+        return fmt.Errorf("error after rows iteration: %w", rows.Err())
+    }
+
+    for idStr, amount := range orders {
+        for _, w := range warehouse {
+            _, err := strconv.ParseInt(idStr, 10, 64)
+            if err != nil {
+                return fmt.Errorf("error parsing id to int: %w", err)
+            }
+
+            if w.Quantity+amount < 0 {
+                return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
+            }
+        }
+    }
+
+    // 2. Обновление остатков
+    for idStr, amount := range orders {
+        id, err := strconv.ParseInt(idStr, 10, 64)
+        if err != nil {
+            return fmt.Errorf("error parsing id to int: %w", err)
+        }
+
+        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity + $1 WHERE id = $2`, amount, id)
+        if err != nil {
+            return fmt.Errorf("error updating warehouse: %w", err)
+        }
+    }  
+
+    return nil
+}
+
+func DefUNIR(db *sql.DB, height int64, width int64) error{
+    orders := map[string]int{"147":height, "148": height, "153":height,"155":height,"159":1,"167":2,"174":width*2-14, "178":width*2-30, "182":1,"184":2,"187":2,"191":2,"192":height, "194":height,"197":width*2-14,"224":1}
 
     rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
     if err != nil {
