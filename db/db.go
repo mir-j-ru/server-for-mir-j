@@ -460,7 +460,7 @@ func VerDef(db *sql.DB, height int64, width int64) error{
                 return fmt.Errorf("error parsing id to int: %w", err)
             }
 
-            if w.Quantity+amount < 0 {
+            if w.Quantity-amount < 0 {
                 return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
 
@@ -576,7 +576,7 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
                 return fmt.Errorf("error parsing id to int: %w", err)
             }
 
-            if w.Quantity+amount < 0 {
+            if w.Quantity-amount < 0 {
                 return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
 
@@ -600,7 +600,7 @@ func DefMINI(db *sql.DB, height int64, width int64) error{
             return fmt.Errorf("error parsing id to int: %w", err)
         }
 
-        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity + $1 WHERE id = $2`, amount, id)
+        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity - $1 WHERE id = $2`, amount, id)
         if err != nil {
             return fmt.Errorf("error updating warehouse: %w", err)
         }
@@ -663,7 +663,7 @@ func DefUNIL(db *sql.DB, height int64, width int64) error{
                 return fmt.Errorf("error parsing id to int: %w", err)
             }
 
-            if w.Quantity+amount < 0 {
+            if w.Quantity-amount < 0 {
                 return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
         }
@@ -676,7 +676,7 @@ func DefUNIL(db *sql.DB, height int64, width int64) error{
             return fmt.Errorf("error parsing id to int: %w", err)
         }
 
-        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity + $1 WHERE id = $2`, amount, id)
+        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity - $1 WHERE id = $2`, amount, id)
         if err != nil {
             return fmt.Errorf("error updating warehouse: %w", err)
         }
