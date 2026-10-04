@@ -738,7 +738,7 @@ func DefUNIR(db *sql.DB, height int64, width int64) error{
             return fmt.Errorf("error parsing id to int: %w", err)
         }
 
-        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity + $1 WHERE id = $2`, amount, id)
+        _, err = db.Exec(`UPDATE warehouse_list SET quantity = quantity - $1 WHERE id = $2`, amount, id)
         if err != nil {
             return fmt.Errorf("error updating warehouse: %w", err)
         }
