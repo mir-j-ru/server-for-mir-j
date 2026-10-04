@@ -13,7 +13,7 @@ import(
     "ecosystem_mir_j/db"     // или "weather-go-api/db"
 )
 
-func DefUNI(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
+func DefUNIR(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
     wights := r.URL.Query().Get("wight")
     if wights == ""{
         http.Error(w, "error, wight no", http.StatusBadRequest)
@@ -38,7 +38,7 @@ func DefUNI(w http.ResponseWriter, r *http.Request, dbConn *sql.DB){
         return
     }
     
-    err = db.DefUNI(dbConn,h, wight)
+    err = db.DefUNIR(dbConn,h, wight)
     if err!=nil{
         http.Error(w, "error db:"+err.Error(), http.StatusOK)
         return
