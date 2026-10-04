@@ -663,7 +663,7 @@ func DefUNIL(db *sql.DB, height int64, width int64) error{
                 return fmt.Errorf("error parsing id to int: %w", err)
             }
 
-            if w.Quantity-amount < 0 {
+            if w.Quantity-int(amount) < 0 {
                 return fmt.Errorf("недостаточно товара на складе %s (id=%d)", w.Name, w.ID)
             }
         }
