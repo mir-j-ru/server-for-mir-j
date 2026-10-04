@@ -686,7 +686,7 @@ func DefUNIL(db *sql.DB, height int64, width int64) error{
 }
 
 func DefUNIR(db *sql.DB, height int64, width int64) error{
-    orders := map[string]int{"147":height, "148": height, "153":height,"155":height,"159":1,"167":2,"174":width*2-14, "178":width*2-30, "182":1,"184":2,"187":2,"191":2,"192":height, "194":height,"197":width*2-14,"224":1}
+    orders := map[string]int{"147":height, "148": int(height), "153":int(height),"155":int(height),"159":1,"167":2,"174":int(width)*2-14, "178":int(width)*2-30, "182":1,"184":2,"187":2,"191":2,"192":int(height), "194":int(height),"197":int(width)*2-14,"224":1}
 
     rows, err := db.Query(`SELECT id, name, quantity, category, number FROM warehouse_list`)
     if err != nil {
