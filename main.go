@@ -54,8 +54,12 @@ func main(){
         handlers.VerDef(w, r, dbConn)
     })//вычитание вертикальной комплектации
 
-    http.HandleFunc("/defuni", func(w http.ResponseWriter, r *http.Request){
-        handlers.DefUNI(w, r, dbConn)
+    http.HandleFunc("/defuniL", func(w http.ResponseWriter, r *http.Request){
+        handlers.DefUNIL(w, r, dbConn)
+    })//добавление комплектации
+
+    http.HandleFunc("/defuniR", func(w http.ResponseWriter, r *http.Request){
+        handlers.DefUNIR(w, r, dbConn)
     })//добавление комплектации
 
     http.HandleFunc("/defmini", func(w http.ResponseWriter, r *http.Request){
